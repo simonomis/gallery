@@ -1,0 +1,114 @@
+
+// either 36px or 64px
+$toolbarMobile: 36px;
+$toolbarDesktop: 64px;
+
+// some common mixins
+@mixin shadow($size, $colour) {
+  -webkit-box-shadow: $size $size $size+1 $colour;
+  -moz-box-shadow: $size $size $size+1 $colour;
+  box-shadow: $size $size $size+1 $colour;
+}
+
+@mixin rounded($size) {
+  -webkit-border-radius: $size;
+  -moz-border-radius: $size;
+  border-radius: $size;
+}
+
+@mixin transition($property, $duration, $timing) {
+  -webkit-transition: $property $duration $timing;
+  -moz-transition: $property $duration $timing;
+  -o-transition: $property $duration $timing;
+  transition: $property $duration $timing;
+}
+
+body {
+  font-family: Helvetica, Arial;
+  margin: 0px;
+}
+
+#toolbar {
+  position: absolute;
+  top: 0px;
+  width: 100%;
+  height: $toolbarDesktop;
+  background-image: url(toolbar-#{$toolbarDesktop}.png);
+  background-repeat: repeat-x;
+
+  body.mobile & {
+    height: $toolbarMobile;
+    background-image: url(toolbar-#{$toolbarMobile}.png);
+  }
+
+  #title {
+    $titleSize: 20px;
+    text-align: center;
+    font-size: $titleSize;
+    font-weight: bold;
+    color: white;
+    width: 200px;
+    top: ($toolbarDesktop - $titleSize) / 2 - 4;
+    position: relative;
+    margin: 0px auto;
+
+    body.mobile & {
+      top: ($toolbarMobile - $titleSize) / 2 - 4;
+    }
+  }
+}
+
+#content {
+  position: absolute;
+  top: $toolbarDesktop;
+  bottom: 0px;
+  width: 100%;
+
+  body.mobile & {
+    top: $toolbarMobile;
+  }
+}
+
+$num_slides: 5;
+
+#photoview {
+  $bg: #555;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  background-color: $bg;
+
+  #photoslider {
+    position: relative;
+    left: - (floor($num_slides/2) * 80%) + 10%;
+    width: $num_slides * 80%;
+    height: 100%;
+
+    .slide {
+      height: 100%;
+      width: (100 / $num_slides) * 1%;
+      float:left;
+      margin: 0px;
+      padding: 0px;
+      @include transition(width, 0.7s, ease-in-out);
+
+      &.hidden { width: 0px; }
+      &.noanimation { @include transition(none, 0s, linear); }
+
+      .photo {
+        position: relative;
+        margin: 0px auto;
+        background-color: white;
+        @include shadow(10px, $bg - #111);
+        width: 90%;
+        height: 80%;
+
+        img {
+          border: 0px;
+          margin: 0px;
+          display: none;
+        }
+      }
+    }
+  }
+}
