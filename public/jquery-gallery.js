@@ -2,8 +2,12 @@
 
   // setup a couple of helper methods for the gallery
   $.fn.showPhoto = function(index) {
-    var slide = $(this),
-        div = slide.children().first(),
+    var slide = $(this);
+
+    if (!slide.hasClass("slide"))
+      return;
+
+    var div = slide.children().first(),
         img = div.children("img"),
         photos = slide.parent().data("photo-info"),
         photo = photos[index];
@@ -14,31 +18,7 @@
       // set the img's src to get it loading
       img.attr("src", photo.url);
 
-      // work out how to scale the image
-      var scale = 1.0,
-          max_w = slide.width() - 10,
-          max_h = slide.height() - 10;
-          
-      if (photo.width > max_w || photo.height > max_h) {
-        if (photo.width - max_w > photo.height - max_h) {
-          // scale to width
-          scale = max_w / photo.width;
-        } else {
-          // scale to height
-          scale = max_h / photo.height;
-        }
-      }
-      
-      var width = photo.width * scale,
-          height = photo.height * scale,
-          top = (slide.height() - height) / 2;
-          
-      div.css({ 'width': width,
-                'height': height,
-                'top': top });
-                
-      img.css({ 'width': width,
-                'height': height });
+      slide._scalePhoto(slide, photo, div, img);
       
       div.show();
     } else {
@@ -46,8 +26,57 @@
     }
   };
 
+  $.fn.rescalePhoto = function() {
+    var slide = $(this);
+
+    if (!slide.hasClass("slide"))
+      return;
+
+    var div = slide.children().first(),
+        img = div.children("img"),
+        index = slide.data("photo-index"),
+        photos = slide.parent().data("photo-info");
+
+    if (index >= 0 && index < photos.length) {
+      slide._scalePhoto(slide, photos[index], div, img);
+    }
+  };
+
+  $.fn._scalePhoto = function(slide, photo, div, img) {
+    // work out how to scale the image
+    var scale = 1.0,
+        max_w = slide.width() - 10,
+        max_h = slide.height() - 10;
+
+    if (photo.width > max_w || photo.height > max_h) {
+      if (photo.width - max_w > photo.height - max_h) {
+        // scale to width
+        scale = max_w / photo.width;
+      } else {
+        // scale to height
+        scale = max_h / photo.height;
+      }
+    }
+
+    var width = photo.width * scale,
+        height = photo.height * scale,
+        top = (slide.height() - height) / 2;
+
+    div.css({ 'width': width,
+              'height': height,
+              'top': top });
+
+    img.css({ 'width': width,
+              'height': height });
+  };
+
   $.fn.clearPhoto = function() {
-    $(this).find("img").removeAttr("src");
+    var slide = $(this);
+
+    if (!slide.hasClass("slide"))
+      return;
+
+    slide.find("img").removeAttr("src");
   };
 
   var slideQueue = $({});

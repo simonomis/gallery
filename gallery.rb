@@ -14,6 +14,8 @@ get '/album' do
 end
 
 get '/album/:id' do |id|
+  puts "id: " + id
+  puts "size: " + params.to_s
   content_type :json
   '{ "photos": [
     {

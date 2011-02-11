@@ -62,13 +62,30 @@ $(document).ready(function() {
     console.log(ex);
     $(this).show();
   });
-  
-  $.getJSON('/album/1', function(data) {
+
+  loadAlbum(1);
+
+  // setup the window resize handler
+  $(window).bind('resize', function() {
+    $(".slide").each(function() {
+      $(this).rescalePhoto();
+    });
+  });
+
+});
+
+function loadAlbum(id) {
+  var slide = $(".slide:first"),
+      size = {
+        width: slide.width(),
+        height: slide.height()
+      };
+
+  $.getJSON('/album/'+id, size, function(data) {
     $("#photoslider").data("photo-info", data.photos);
     populateSlides();
   });
-  
-});
+}
 
 function queueSlideLeft() {
   $().queueSlide(slideLeft);
