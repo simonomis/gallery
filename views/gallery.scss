@@ -69,6 +69,16 @@ body {
   }
 }
 
+#error {
+  display: none;
+  position: absolute;
+  font-weight: bold;
+  font-size: 36px;
+  color: white;
+  left: 50px;
+  top: 100px
+}
+
 $num_slides: 5;
 
 #photoview {
@@ -100,13 +110,12 @@ $num_slides: 5;
         margin: 0px auto;
         background-color: white;
         @include shadow(10px, $bg - #111);
-        width: 90%;
-        height: 80%;
+        //width: 90%;
+        //height: 80%;
 
         img {
           border: 0px;
           margin: 0px;
-          display: none;
         }
       }
     }

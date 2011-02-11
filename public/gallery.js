@@ -1,33 +1,73 @@
 
-//var photos = [1,2,3,4,5,6];
-
-var photos = [
+/*var photos = [
   {
-    "id": "111",
-    "height": 320,
-    "width": 400
-  },
-  {
-    "id": "222",
-    "height": 400,
+    "url": "photos/1.jpg",
+    "height": 240,
     "width": 320
   },
   {
-    "id": "333",
+    "url": "photos/2.jpg",
+    "height": 240,
+    "width": 320
+  },
+  {
+    "url": "photos/3.jpg",
     "height": 320,
-    "width": 400
+    "width": 240
+  },
+  {
+    "url": "photos/4.jpg",
+    "height": 240,
+    "width": 320
+  },
+  {
+    "url": "photos/5.jpg",
+    "height": 240,
+    "width": 320
+  },
+  {
+    "url": "photos/6.jpg",
+    "height": 320,
+    "width": 240
+  },
+  {
+    "url": "photos/7.jpg",
+    "height": 240,
+    "width": 320
+  },
+  {
+    "url": "photos/8.jpg",
+    "height": 240,
+    "width": 320
+  },
+  {
+    "url": "photos/9.jpg",
+    "height": 320,
+    "width": 240
   }
-];
+];*/
 
 $(document).ready(function() {
-  $("#photoslider").data("photo-info", photos);
   // setup the swipes
   $("body").swipe({
     swipeLeft: queueSlideLeft,
     swipeRight: queueSlideRight
   });
+  
+  // setup the clicks
   setClickHandlers();
-  populateSlides(photos);
+  
+  // setup the error message
+  $("#error").ajaxError(function(e, x, h, ex) {
+    console.log(ex);
+    $(this).show();
+  });
+  
+  $.getJSON('/album/1', function(data) {
+    $("#photoslider").data("photo-info", data.photos);
+    populateSlides();
+  });
+  
 });
 
 function queueSlideLeft() {
@@ -38,7 +78,7 @@ function queueSlideRight() {
   $().queueSlide(slideRight);
 }
 
-function populateSlides(photos) {
+function populateSlides() {
   $(".slide").each(function(i) {
     $(this).showPhoto(i-2);
   });

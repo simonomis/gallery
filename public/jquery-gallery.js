@@ -3,22 +3,46 @@
   // setup a couple of helper methods for the gallery
   $.fn.showPhoto = function(index) {
     var slide = $(this),
-        photo = slide.children().first(),
-        photos = slide.parent().data("photo-info");
+        div = slide.children().first(),
+        img = div.children("img"),
+        photos = slide.parent().data("photo-info"),
+        photo = photos[index];
 
     slide.data("photo-index", index);
     
     if (index >= 0 && index < photos.length) {
-      // TODO: set the img's src
-      //photo.children("img").attr("src", photos[index].id);
-      photo.text(photos[index].id);
-      /*photo.css({ 'width': photos[index].width,
-                  'height': photos[index].height,
-                  'top': (slide.height() - photos[index].height)/2});*/
-      photo.css('top', '36px');
-      photo.show();
+      // set the img's src to get it loading
+      img.attr("src", photo.url);
+
+      // work out how to scale the image
+      var scale = 1.0,
+          max_w = slide.width() - 10,
+          max_h = slide.height() - 10;
+          
+      if (photo.width > max_w || photo.height > max_h) {
+        if (photo.width - max_w > photo.height - max_h) {
+          // scale to width
+          scale = max_w / photo.width;
+        } else {
+          // scale to height
+          scale = max_h / photo.height;
+        }
+      }
+      
+      var width = photo.width * scale,
+          height = photo.height * scale,
+          top = (slide.height() - height) / 2;
+          
+      div.css({ 'width': width,
+                'height': height,
+                'top': top });
+                
+      img.css({ 'width': width,
+                'height': height });
+      
+      div.show();
     } else {
-      photo.hide();
+      div.hide();
     }
   };
 
