@@ -8,15 +8,21 @@
       return;
 
     var div = slide.children().first(),
-        img = div.children("img"),
         photos = slide.parent().data("photo-info"),
         photo = photos[index];
 
     slide.data("photo-index", index);
     
     if (index >= 0 && index < photos.length) {
-      // set the img's src to get it loading
-      img.attr("src", photo.url);
+      // get the img loading
+      var img = div.children("img");
+      
+      if (img === undefined) {
+        img = $('<img src="' + photo.url + '" />');
+        div.prepend(img);
+      } else {
+        img.attr('src', photo.url);
+      }
 
       slide._scalePhoto(slide, photo, div, img);
       
@@ -49,21 +55,20 @@
         max_h = slide.height() - 10;
 
     if (photo.width > max_w || photo.height > max_h) {
-      if (photo.width - max_w > photo.height - max_h) {
-        // scale to width
-        scale = max_w / photo.width;
-      } else {
-        // scale to height
-        scale = max_h / photo.height;
-      }
+      var scale_w = max_w / photo.width,
+          scale_h = max_h / photo.height;
+          
+      scale = Math.min(scale_w, scale_h);
     }
 
     var width = photo.width * scale,
         height = photo.height * scale,
         top = (slide.height() - height) / 2;
 
-    div.css({ 'width': width,
-              'height': height,
+    // the -1 covers up any mismatches with the scaling; the div has overflow
+    // set to hidden so it's better for the img to be slightly larger
+    div.css({ 'width': width-1,
+              'height': height-1,
               'top': top });
 
     img.css({ 'width': width,
@@ -76,7 +81,7 @@
     if (!slide.hasClass("slide"))
       return;
 
-    slide.find("img").removeAttr("src");
+    slide.find("img").remove();
   };
 
   var slideQueue = $({});

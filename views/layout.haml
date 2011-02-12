@@ -2,7 +2,7 @@
 %html
   %head
     %title Gallery
-    %meta(name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1")
+    %meta(name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0")
     %link(rel="stylesheet" href="/gallery.css")
     %script(type="text/javascript" src="jquery-1.5.min.js")
     %script(type="text/javascript" src="jquery.jswipe-0.1.2.js")
@@ -10,8 +10,10 @@
     %script(type="text/javascript" src="gallery.js")
 
   %body.mobile
-    #toolbar
-      #title= @title
+    / 
+      possibly don't want a toolbar as it takes up too much room
+      #toolbar
+        #title= @title
 
     #content
       =yield

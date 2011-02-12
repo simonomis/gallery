@@ -1,6 +1,6 @@
 
 // either 36px or 64px
-$toolbarMobile: 36px;
+$toolbarMobile: 0px;
 $toolbarDesktop: 64px;
 
 // some common mixins
@@ -23,9 +23,12 @@ $toolbarDesktop: 64px;
   transition: $property $duration $timing;
 }
 
+$bg-color: #555;
+
 body {
   font-family: Helvetica, Arial;
   margin: 0px;
+  background-color: $bg-color;
 }
 
 #toolbar {
@@ -82,11 +85,9 @@ body {
 $num_slides: 5;
 
 #photoview {
-  $bg: #555;
   height: 100%;
   width: 100%;
   overflow: hidden;
-  background-color: $bg;
 
   #photoslider {
     position: relative;
@@ -108,10 +109,9 @@ $num_slides: 5;
       .photo {
         position: relative;
         margin: 0px auto;
+        overflow: hidden;
         background-color: white;
-        @include shadow(10px, $bg - #111);
-        //width: 90%;
-        //height: 80%;
+        @include shadow(5px, $bg-color - #111);
 
         img {
           border: 0px;

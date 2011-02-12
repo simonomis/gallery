@@ -1,57 +1,21 @@
 
-/*var photos = [
-  {
-    "url": "photos/1.jpg",
-    "height": 240,
-    "width": 320
-  },
-  {
-    "url": "photos/2.jpg",
-    "height": 240,
-    "width": 320
-  },
-  {
-    "url": "photos/3.jpg",
-    "height": 320,
-    "width": 240
-  },
-  {
-    "url": "photos/4.jpg",
-    "height": 240,
-    "width": 320
-  },
-  {
-    "url": "photos/5.jpg",
-    "height": 240,
-    "width": 320
-  },
-  {
-    "url": "photos/6.jpg",
-    "height": 320,
-    "width": 240
-  },
-  {
-    "url": "photos/7.jpg",
-    "height": 240,
-    "width": 320
-  },
-  {
-    "url": "photos/8.jpg",
-    "height": 240,
-    "width": 320
-  },
-  {
-    "url": "photos/9.jpg",
-    "height": 320,
-    "width": 240
-  }
-];*/
-
 $(document).ready(function() {
   // setup the swipes
   $("body").swipe({
     swipeLeft: queueSlideLeft,
     swipeRight: queueSlideRight
+  });
+  
+  // setup the arrow keys
+  $("body").bind('keydown', function(e) {
+    var key = e.keyCode || e.which;
+    if (key == 37) {
+      // left arrow
+      queueSlideRight();
+    } else if (key == 39) {
+      // right arrow
+      queueSlideLeft();
+    }
   });
   
   // setup the clicks
@@ -82,6 +46,7 @@ function loadAlbum(id) {
       };
 
   $.getJSON('/album/'+id, size, function(data) {
+    //console.log(data);
     $("#photoslider").data("photo-info", data.photos);
     populateSlides();
   });
