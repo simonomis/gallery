@@ -1,0 +1,6 @@
+--- !ruby/object:Flickr::Auth::Token 
+permisions: read
+token: 72157625895250809-7f94b33155112a80
+user_id: 59271447@N08
+user_real_name: ""
+username: 18leatherhead
