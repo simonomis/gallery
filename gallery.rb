@@ -8,8 +8,9 @@ require 'json'
 FLICKR_YML = File.join('config', 'flickr.yml')
 
 get '/' do
-  @title = "Yes"
-  haml :index
+  #@title = "Yes"
+  #haml :index
+  redirect '/album'
 end
 
 get '/album' do
