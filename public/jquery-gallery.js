@@ -17,7 +17,7 @@
       // get the img loading
       var img = div.children("img");
       
-      if (img === undefined) {
+      if (img.size() == 0) {
         img = $('<img src="' + photo.url + '" />');
         div.prepend(img);
       } else {
