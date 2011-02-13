@@ -15,6 +15,9 @@ $(document).ready(function() {
     } else if (key == 39) {
       // right arrow
       queueSlideLeft();
+    } else if (key == 32) {
+      // space bar
+      toggleSlideshow();
     }
   });
   
@@ -53,11 +56,29 @@ function loadAlbum(id) {
 }
 
 function queueSlideLeft() {
+  stopSlideshow();
   $().queueSlide(slideLeft);
 }
 
 function queueSlideRight() {
+  stopSlideshow();
   $().queueSlide(slideRight);
+}
+
+function queueSlideshowSlide() {
+  $().queueSlide(slideLeft);
+}
+
+function toggleSlideshow() {
+  var num_photos = $("#photoslider").data("photo-info").length,
+      index = $(this).data("photo-index"),
+      times = num_photos - index - 1;
+
+  $("#photoslider").toggleTime("5s", "slideshow", queueSlideshowSlide, times);
+}
+
+function stopSlideshow() {
+  $("#photoslider").stopTime("slideshow");
 }
 
 function populateSlides() {
@@ -76,6 +97,7 @@ function setClickHandlers() {
   var slides = $(".slide");
   $(slides[1]).bind('click', queueSlideRight);
   $(slides[3]).bind('click', queueSlideLeft);
+  $(slides[2]).bind('click', toggleSlideshow);
 }
 
 function slideLeft(finished) {

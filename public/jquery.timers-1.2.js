@@ -24,6 +24,11 @@ jQuery.fn.extend({
 		return this.each(function() {
 			jQuery.timer.remove(this, label, fn);
 		});
+	},
+	toggleTime: function(interval, label, fn, times) {
+		return this.each(function() {
+			jQuery.timer.toggle(this, interval, label, fn, times);
+		});
 	}
 });
 
@@ -126,6 +131,15 @@ jQuery.extend({
 				for ( ret in timers ) break;
 				if ( !ret ) 
 					jQuery.removeData(element, this.dataKey);
+			}
+		},
+		toggle: function(element, interval, label, fn, times) {
+			var timers = jQuery.data(element, this.dataKey);
+			
+			if ( timers && timers[label] && timers[label][fn.timerID]) {
+				jQuery.timer.remove(element, label, fn);
+			} else {
+			  jQuery.timer.add(element, interval, label, fn, times);
 			}
 		}
 	}
