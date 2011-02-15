@@ -29,6 +29,9 @@ jQuery.fn.extend({
 		return this.each(function() {
 			jQuery.timer.toggle(this, interval, label, fn, times);
 		});
+	},
+	queryTime: function(label, fn) {
+		return jQuery.timer.query(this[0], label, fn);
 	}
 });
 
@@ -136,11 +139,15 @@ jQuery.extend({
 		toggle: function(element, interval, label, fn, times) {
 			var timers = jQuery.data(element, this.dataKey);
 			
-			if ( timers && timers[label] && timers[label][fn.timerID]) {
-				jQuery.timer.remove(element, label, fn);
+			if (timers && timers[label] && timers[label][fn.timerID]) {
+        jQuery.timer.remove(element, label, fn);
 			} else {
-			  jQuery.timer.add(element, interval, label, fn, times);
+        jQuery.timer.add(element, interval, label, fn, times);
 			}
+		},
+		query: function(element, label, fn) {
+		  var timers = jQuery.data(element, this.dataKey);
+			return (!!timers && !!timers[label] && (fn === undefined || timers[label][fn.timerID]));
 		}
 	}
 });

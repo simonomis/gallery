@@ -82,6 +82,20 @@ body {
   top: 100px
 }
 
+.overlay {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: 100px;
+  height: 100px;
+  margin-left: -50px;
+  margin-top: -50px;
+  
+  opacity: 0.0;
+  @include transition(opacity, 0.7s, ease-in-out);
+}
+
 $num_slides: 5;
 
 #photoview {
