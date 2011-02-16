@@ -70,11 +70,62 @@ function queueSlideshowSlide() {
 }
 
 function toggleSlideshow() {
+  var slider = $("#photoslider");
+  
+  // if its running, stop it
+  if (slider.queryTime("slideshow", queueSlideshowSlide)) {
+    stopSlideshow();
+    showStopOverlay();
+    return;
+  }
+  
   var num_photos = $("#photoslider").data("photo-info").length,
       index = $(this).data("photo-index"),
       times = num_photos - index - 1;
 
-  $("#photoslider").toggleTime("5s", "slideshow", queueSlideshowSlide, times);
+  if (times <= 0) {
+    return;
+  }
+  
+  startSlideshow(times);
+  showStartOverlay();
+}
+
+function showStopOverlay() {
+  var overlay = $("#stop");
+  
+  overlay.show();
+  overlay.width(); // triggers browser to show before the transition starts
+  
+  overlay.addClass("show");
+  overlay.oneTime("1.5s", function() {
+    var hider = function() {
+      overlay.hide();
+    }
+    
+    if ($.support.cssTransition) {
+      
+    } else {
+      
+    }
+    overlay.removeClass("show");
+  });
+}
+
+function showStartOverlay() {
+  var overlay = $("#start");
+  
+  overlay.show();
+  overlay.width(); // triggers browser to show before the transition starts
+  
+  overlay.addClass("show");
+  overlay.oneTime("2s", "hide", function() {
+    overlay.removeClass("show");
+  });
+}
+
+function startSlideshow(times) {
+  $("#photoslider").everyTime("5s", "slideshow", queueSlideshowSlide, times);
 }
 
 function stopSlideshow() {
