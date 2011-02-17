@@ -73,8 +73,7 @@ function queueSlideshowSlide() {
   $().queueSlide(slideLeft);
 }
 
-function toggleSlideshow(e) {
-  e.preventDefault();
+function toggleSlideshow() {
   var slider = $("#photoslider");
   
   // if its running, stop it
