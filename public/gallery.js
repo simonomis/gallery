@@ -39,6 +39,10 @@ $(document).ready(function() {
     });
   });
 
+  $("#duration").bind('click', function() {
+    $("#start").stopTime("hide");
+  });
+
 });
 
 function loadAlbum(id) {
@@ -87,7 +91,6 @@ function toggleSlideshow() {
     return;
   }
   
-  startSlideshow(times);
   showStartOverlay();
 }
 
@@ -95,20 +98,13 @@ function showStopOverlay() {
   var overlay = $("#stop");
   
   overlay.show();
-  overlay.width(); // triggers browser to show before the transition starts
   
-  overlay.addClass("show");
-  overlay.oneTime("1.5s", function() {
-    var hider = function() {
-      overlay.hide();
-    }
-    
-    if ($.support.cssTransition) {
-      
-    } else {
-      
-    }
-    overlay.removeClass("show");
+  overlay.addTransitionClass("show", function() {
+    overlay.oneTime("1s", "hide", function() {
+      overlay.removeTransitionClass("show", function() {
+        overlay.hide();
+      });
+    });
   });
 }
 
@@ -116,16 +112,23 @@ function showStartOverlay() {
   var overlay = $("#start");
   
   overlay.show();
-  overlay.width(); // triggers browser to show before the transition starts
   
-  overlay.addClass("show");
-  overlay.oneTime("2s", "hide", function() {
-    overlay.removeClass("show");
+  overlay.addTransitionClass("show", function() {
+    overlay.oneTime("2s", "hide", function() {
+      overlay.removeTransitionClass("show", function() {
+        overlay.hide();
+        startSlideshow($("#duration").text());
+      });
+    });
   });
 }
 
-function startSlideshow(times) {
-  $("#photoslider").everyTime("5s", "slideshow", queueSlideshowSlide, times);
+function startSlideshow(duration) {
+  var num_photos = $("#photoslider").data("photo-info").length,
+      index = $(this).data("photo-index"),
+      times = num_photos - index - 1;
+
+  $("#photoslider").everyTime(duration+"s", "slideshow", queueSlideshowSlide, times);
 }
 
 function stopSlideshow() {
@@ -166,22 +169,10 @@ function slideLeft(finished) {
   clearClickHandlers();
   slide.clearPhoto();
 
-  if ($.support.cssTransition) {
-    // setup the transition end handler
-    slide.one($.support.cssTransitionEnd, function() {
-      moveSlideToTheRightEnd(slide);
-      finished();
-    });
-
-    // start the animation
-    slide.addClass("hidden");
-
-  } else {
-    // no transitions so just hide and move
-    slide.addClass("hidden");
+  slide.addTransitionClass("hidden", function() {
     moveSlideToTheRightEnd(slide);
     finished();
-  }
+  });
 }
 
 function moveSlideToTheRightEnd(slide) {
@@ -221,28 +212,14 @@ function moveSlideToTheLeftEnd(slide, finished) {
   slide.addClass("noanimation").addClass("hidden").removeClass("noanimation");
 
   // detach the slide and stick it at the front of the list
-  slide.detach();
-  $("#photoslider").prepend(slide);
+  $("#photoslider").prepend(slide.detach());
 
-  if ($.support.cssTransition) {
-    // setup the transition end handler
-    slide.one($.support.cssTransitionEnd, function() {
-      // register the click handlers on the new left and right slides
-      setClickHandlers();
-
-      // load the new img for this slide
-      slide.showPhoto(slide.data("photo-index")-5);
-      finished();
-    });
-
-    // start the animation (timeout works around issue in chrome)
-    setTimeout(function() { slide.removeClass("hidden"); }, 10);
-
-  } else {
-    // no transitions so just unhide and setup the slide
-    slide.removeClass("hidden");
+  slide.removeTransitionClass("hidden", function() {
+    // register the click handlers on the new left and right slides
     setClickHandlers();
+
+    // load the new img for this slide
     slide.showPhoto(slide.data("photo-index")-5);
     finished();
-  }
+  });
 }

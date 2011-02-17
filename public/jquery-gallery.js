@@ -94,6 +94,42 @@
     });
   };
 
+  $.fn.addTransitionClass = function(clazz, callback) {
+    if ($.support.cssTransition) {
+      // force browser to reflow before starting transition
+      this.width();
+
+      // setup the transition end callback
+      this.one($.support.cssTransitionEnd, callback);
+
+      // start the transition
+      this.addClass(clazz);
+
+    } else {
+      // no transitions
+      this.addClass(clazz);
+      callback();
+    }
+  };
+
+  $.fn.removeTransitionClass = function(clazz, callback) {
+    if ($.support.cssTransition) {
+      // force browser to reflow before starting transition
+      this.width();
+
+      // setup the transition end callback
+      this.one($.support.cssTransitionEnd, callback);
+
+      // start the transition
+      this.removeClass(clazz);
+
+    } else {
+      // no transitions
+      this.removeClass(clazz);
+      callback();
+    }
+  };
+
   // check whether the browser supports CSS transitions
   var doc = $(document),
       test = $('<div>').css({
