@@ -73,7 +73,8 @@ function queueSlideshowSlide() {
   $().queueSlide(slideLeft);
 }
 
-function toggleSlideshow() {
+function toggleSlideshow(e) {
+  e.preventDefault();
   var slider = $("#photoslider");
   
   // if its running, stop it
@@ -100,7 +101,7 @@ function showStopOverlay() {
   overlay.show();
   
   overlay.addTransitionClass("show", function() {
-    overlay.oneTime("1s", "hide", function() {
+    overlay.oneTime("1.5s", "hide", function() {
       overlay.removeTransitionClass("show", function() {
         overlay.hide();
       });

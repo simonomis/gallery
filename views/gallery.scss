@@ -97,6 +97,19 @@ body {
   
   &.show {
     opacity: 1.0;
+    @include transition(opacity, 0.3s, ease-in-out);
+  }
+}
+
+#stop {
+  background-image: url(stop.png);
+}
+
+#start {
+  background-image: url(play.png);
+  
+  div {
+    display: none;
   }
 }
 
